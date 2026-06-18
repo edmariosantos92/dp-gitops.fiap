@@ -28,11 +28,9 @@ jobs:
           if [ "${{ github.ref_name }}" == "main" ]; then
             echo "env=prd" >> $GITHUB_OUTPUT
             echo "backend=backend-configs/prd.hcl" >> $GITHUB_OUTPUT
-            echo "tfvars=envs/prd.tfvars" >> $GITHUB_OUTPUT
           else
             echo "env=dev" >> $GITHUB_OUTPUT
             echo "backend=backend-configs/dev.hcl" >> $GITHUB_OUTPUT
-            echo "tfvars=envs/dev.tfvars" >> $GITHUB_OUTPUT
           fi
 
       - name: Configure AWS credentials
@@ -53,7 +51,7 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ${{ env.TF_DIR }}
-        run: terraform apply -auto-approve -var-file=${{ steps.env.outputs.tfvars }}
+        run: terraform apply -auto-approve -var="env=${{ steps.env.outputs.env }}"
 
       # ── Docker Build & Push ───────────────────────────────────────
       - name: Login to ECR
