@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rm565486-app-prd
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/edmariosantos92/dp-gitops.fiap
+    targetRevision: main
+    path: k8s/overlays/prd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rm565486-prd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
