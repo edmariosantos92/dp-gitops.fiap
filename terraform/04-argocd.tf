@@ -1,0 +1,21 @@
+resource "helm_release" "argocd" {
+  name             = "argocd"
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-cd"
+  version          = "~> 7.0"
+  namespace        = "argocd"
+  create_namespace = true
+
+  depends_on = [module.eks]
+
+  values = [
+    <<-EOT
+    server:
+      service:
+        type: LoadBalancer
+    configs:
+      params:
+        server.insecure: "true"
+    EOT
+  ]
+}
