@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base
+- ../../base
 
 namespace: rm565486-dev
 
@@ -12,9 +12,9 @@ commonLabels:
   environment: dev
 
 images:
-  - name: rm565486-app
-    newName: PLACEHOLDER_ECR_URL/rm565486-app
-    newTag: latest
+- name: rm565486-app
+  newName: 826773401041.dkr.ecr.eu-central-1.amazonaws.com/rm565486-app
+  newTag: 5c28e72419fad3f80b7c44029fdcb04cda00ec94
 
 patches:
-  - path: patch-replicas.yaml
+- path: patch-replicas.yaml
