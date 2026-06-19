@@ -18,3 +18,4 @@ images:
 
 patches:
 - path: patch-replicas.yaml
+- path: patch-env.yaml
