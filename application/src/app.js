@@ -19,4 +19,8 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+app.get('/version', (req, res) => {
+  res.status(200).json({ version });
+});
+
 module.exports = app;
