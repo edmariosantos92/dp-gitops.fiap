@@ -10,6 +10,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY src/ ./src/
 COPY package.json ./
 
+ARG IMAGE_TAG=dev
+ENV IMAGE_TAG=$IMAGE_TAG
 ENV NODE_ENV=production
 ENV PORT=3000
 

@@ -77,7 +77,7 @@ jobs:
           ENV: ${{ steps.env.outputs.env }}
         run: |
           IMAGE=$REGISTRY/rm565486-app
-          docker build -t $IMAGE:$IMAGE_TAG ./application
+          docker build --build-arg IMAGE_TAG=$IMAGE_TAG -t $IMAGE:$IMAGE_TAG ./application
           docker push $IMAGE:$IMAGE_TAG
           docker tag $IMAGE:$IMAGE_TAG $IMAGE:$ENV-latest
           docker push $IMAGE:$ENV-latest
