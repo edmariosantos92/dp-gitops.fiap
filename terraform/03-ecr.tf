@@ -1,6 +1,9 @@
 resource "aws_ecr_repository" "app" {
+  count = var.env == "prd" ? 1 : 0
+
   name                 = "${local.project}-app"
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true
@@ -14,7 +17,8 @@ resource "aws_ecr_repository" "app" {
 }
 
 resource "aws_ecr_lifecycle_policy" "app" {
-  repository = aws_ecr_repository.app.name
+  count      = var.env == "prd" ? 1 : 0
+  repository = aws_ecr_repository.app[0].name
 
   policy = jsonencode({
     rules = [
