@@ -14,7 +14,7 @@ commonLabels:
 images:
 - name: rm565486-app
   newName: 826773401041.dkr.ecr.eu-central-1.amazonaws.com/rm565486-app
-  newTag: 5c001c8de181f0a44c06ce1f59e5de7d8f448925
+  newTag: 4cac7ae065949224422bd0d7c717dc640f448c1a
 
 patches:
 - path: patch-replicas.yaml
