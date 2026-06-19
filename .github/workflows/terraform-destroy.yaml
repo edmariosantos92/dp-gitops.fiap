@@ -51,6 +51,51 @@ jobs:
             --key "{\"LockID\": {\"S\": \"rm565486-tfstate/terraform/${{ steps.cfg.outputs.env }}/terraform.tfstate\"}}" \
             --region ${{ env.AWS_REGION }} || true
 
+      - name: Cleanup VPC dependencies (ENIs, EIPs, SGs)
+        env:
+          ENV: ${{ steps.cfg.outputs.env }}
+        run: |
+          VPC_ID=$(aws ec2 describe-vpcs \
+            --filters "Name=tag:Environment,Values=$ENV" \
+            --query "Vpcs[0].VpcId" --output text --region ${{ env.AWS_REGION }} 2>/dev/null || echo "")
+
+          if [ -z "$VPC_ID" ] || [ "$VPC_ID" = "None" ]; then
+            echo "No VPC found for env=$ENV, skipping cleanup"
+            exit 0
+          fi
+
+          echo "Cleaning up VPC: $VPC_ID"
+
+          # Deletar ENIs nao gerenciados pelo Terraform
+          ENI_IDS=$(aws ec2 describe-network-interfaces \
+            --filters "Name=vpc-id,Values=$VPC_ID" \
+            --query "NetworkInterfaces[?Status!='in-use'].NetworkInterfaceId" \
+            --output text --region ${{ env.AWS_REGION }})
+          for ENI in $ENI_IDS; do
+            echo "Deleting ENI: $ENI"
+            aws ec2 delete-network-interface --network-interface-id $ENI --region ${{ env.AWS_REGION }} || true
+          done
+
+          # Liberar Elastic IPs associados a VPC
+          EIP_ALLOCS=$(aws ec2 describe-addresses \
+            --filters "Name=domain,Values=vpc" \
+            --query "Addresses[].AllocationId" \
+            --output text --region ${{ env.AWS_REGION }})
+          for EIP in $EIP_ALLOCS; do
+            echo "Releasing EIP: $EIP"
+            aws ec2 release-address --allocation-id $EIP --region ${{ env.AWS_REGION }} || true
+          done
+
+          # Deletar Security Groups nao-default da VPC
+          SG_IDS=$(aws ec2 describe-security-groups \
+            --filters "Name=vpc-id,Values=$VPC_ID" \
+            --query "SecurityGroups[?GroupName!='default'].GroupId" \
+            --output text --region ${{ env.AWS_REGION }})
+          for SG in $SG_IDS; do
+            echo "Deleting SG: $SG"
+            aws ec2 delete-security-group --group-id $SG --region ${{ env.AWS_REGION }} || true
+          done
+
       - name: Terraform Destroy
         working-directory: ${{ env.TF_DIR }}
         run: terraform destroy -auto-approve -var="env=${{ steps.cfg.outputs.env }}"
