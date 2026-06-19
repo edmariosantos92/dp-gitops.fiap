@@ -49,6 +49,12 @@ jobs:
         working-directory: ${{ env.TF_DIR }}
         run: terraform init -backend-config=${{ steps.env.outputs.backend }}
 
+      - name: Cleanup stale CloudWatch log group
+        run: |
+          aws logs delete-log-group \
+            --log-group-name "/aws/eks/eks-rm565486-${{ steps.env.outputs.env }}/cluster" \
+            --region ${{ env.AWS_REGION }} || true
+
       - name: Terraform Apply
         working-directory: ${{ env.TF_DIR }}
         run: terraform apply -auto-approve -var="env=${{ steps.env.outputs.env }}"
