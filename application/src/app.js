@@ -7,7 +7,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'dp-gitops API - RM565486',
+    message: 'dp-gitops API - RM565486 - GitOps',
     environment: ENV,
     version: process.env.npm_package_version || '1.0.0',
   });
