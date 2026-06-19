@@ -4,8 +4,8 @@ output "configure_kubectl" {
 }
 
 output "ecr_repository_url" {
-  description = "ECR repository URL"
-  value       = aws_ecr_repository.app.repository_url
+  description = "ECR repository URL (managed by prd only)"
+  value       = one(aws_ecr_repository.app[*].repository_url)
 }
 
 output "argocd_namespace" {
