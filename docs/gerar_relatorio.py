@@ -88,6 +88,7 @@ for label, value in [
     ('Disciplina:', 'Infrastructure as Code (GitOps)'),
     ('Turma:', '1TCNPZ'),
     ('Data:', '19/06/2026'),
+    ('Vídeo:', 'https://diascarneiro-my.sharepoint.com/:f:/g/personal/esa_diascarneiro_com_br/IgBUmfHRiNnfRY5v3KeHWZe2AaOo-7deahO0BH5daWNzrjI?e=IoLelf'),
 ]:
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -449,6 +450,7 @@ refs = [
     'Aqua Security. tfsec - Security Scanner for Terraform. https://github.com/aquasecurity/tfsec',
     'Weaveworks. GitOps Principles. https://www.gitops.tech',
     'Repositório da atividade. https://github.com/edmariosantos92/dp-gitops.fiap',
+    'Vídeo de demonstração. https://diascarneiro-my.sharepoint.com/:f:/g/personal/esa_diascarneiro_com_br/IgBUmfHRiNnfRY5v3KeHWZe2AaOo-7deahO0BH5daWNzrjI?e=IoLelf',
 ]
 for i, ref in enumerate(refs, 1):
     p = doc.add_paragraph()
