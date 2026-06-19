@@ -44,6 +44,13 @@ jobs:
         working-directory: ${{ env.TF_DIR }}
         run: terraform init -backend-config=${{ steps.cfg.outputs.backend }}
 
+      - name: Release stale state lock
+        run: |
+          aws dynamodb delete-item \
+            --table-name rm565486-tflock \
+            --key "{\"LockID\": {\"S\": \"rm565486-tfstate/terraform/${{ steps.cfg.outputs.env }}/terraform.tfstate\"}}" \
+            --region ${{ env.AWS_REGION }} || true
+
       - name: Terraform Destroy
         working-directory: ${{ env.TF_DIR }}
         run: terraform destroy -auto-approve -var="env=${{ steps.cfg.outputs.env }}"
