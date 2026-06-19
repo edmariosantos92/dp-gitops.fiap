@@ -1,15 +1,16 @@
 const express = require('express');
+const { version } = require('../package.json');
 
 const app = express();
-const ENV = process.env.NODE_ENV || 'development';
+const ENV = process.env.APP_ENV || process.env.NODE_ENV || 'development';
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'dp-gitops API - RM565486 - GitOps',
+    message: 'dp-gitops API - RM565486',
     environment: ENV,
-    version: process.env.npm_package_version || '1.0.0',
+    version,
   });
 });
 
