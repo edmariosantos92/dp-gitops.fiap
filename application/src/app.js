@@ -1,8 +1,9 @@
 const express = require('express');
-const { version } = require('../package.json');
+const { version: pkgVersion } = require('../package.json');
 
 const app = express();
 const ENV = process.env.APP_ENV || process.env.NODE_ENV || 'development';
+const version = process.env.IMAGE_TAG || pkgVersion;
 
 app.use(express.json());
 
