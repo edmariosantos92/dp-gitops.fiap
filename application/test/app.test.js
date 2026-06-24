@@ -34,7 +34,8 @@ test('GET /health returns status ok', (t, done) => {
     res.on('end', () => {
       assert.strictEqual(res.statusCode, 200);
       const body = JSON.parse(data);
-      assert.strictEqual(body.status, 'ok');
+      // intentional failure: expected 'healthy', actual is 'ok'
+      assert.strictEqual(body.status, 'healthy');
       done();
     });
   });
